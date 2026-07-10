@@ -15,7 +15,7 @@ export const getStripeClient = (): Stripe => {
     try {
       // ✅ Fixed: Use correct API version '2023-08-16' instead of '2023-10-16'
       stripeInstance = new Stripe(secretKey, {
-        apiVersion: '2023-08-16',
+        apiVersion: '2023-10-16',
         maxNetworkRetries: 2,
       });
       

@@ -1,4 +1,4 @@
-// app.ts (Add for Vercel)
+// app.ts
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -12,25 +12,7 @@ dotenv.config();
 
 const app: Express = express();
 
-// ✅ Health check for Vercel
-app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
-    database: mongoose.connection?.readyState === 1 ? 'connected' : 'disconnected',
-  });
-});
 
-// ✅ Vercel health check
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-  });
-});
-
-// Rest of your middleware...
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -44,7 +26,26 @@ app.use(limiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Routes
+// Request logging
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
+
+
+// Health check
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV,
+    database: mongoose.connection?.readyState === 1 ? 'connected' : 'disconnected',
+  });
+});
+
+// API Routes
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
 import orderRoutes from './routes/orderRoutes';
@@ -62,7 +63,7 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
     message: 'E-commerce API is running!',
     version: '1.0.0',
-    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString(),
     endpoints: {
       auth: '/api/auth',
       products: '/api/products',
