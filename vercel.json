@@ -3,10 +3,29 @@
   "builds": [
     {
       "src": "dist/server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "runtime": "nodejs24.x"
+      }
     }
   ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "dist/server.js"
+    },
+    {
+      "src": "/health",
+      "dest": "dist/server.js"
+    },
+    {
+      "src": "/api/health",
+      "dest": "dist/server.js"
+    },
+    {
+      "src": "/",
+      "dest": "dist/server.js"
+    },
     {
       "src": "/(.*)",
       "dest": "dist/server.js"

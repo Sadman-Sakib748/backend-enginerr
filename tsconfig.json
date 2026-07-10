@@ -18,5 +18,5 @@
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "seeders"]
+  "exclude": ["node_modules", "dist", "seeders", "tests"]
 }

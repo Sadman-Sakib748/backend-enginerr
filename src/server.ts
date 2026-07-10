@@ -1,4 +1,4 @@
-// server.ts
+// server.ts (Complete Vercel Compatible)
 import app from './app';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -12,7 +12,8 @@ async function connectDB(): Promise<void> {
   try {
     const mongoURI = process.env.MONGODB_URI;
     if (!mongoURI) {
-      throw new Error('MONGODB_URI is not defined');
+      logger.warn('⚠️ MONGODB_URI is not defined');
+      return;
     }
 
     await mongoose.connect(mongoURI);
@@ -20,47 +21,54 @@ async function connectDB(): Promise<void> {
     logger.info(`📊 Database: ${mongoose.connection.name}`);
   } catch (error: any) {
     logger.error('❌ MongoDB connection failed:', error.message);
-    process.exit(1);
   }
 }
 
-async function startServer(): Promise<void> {
-  try {
-    await connectDB();
-    
-    const server = app.listen(PORT, () => {
-      logger.info(`🚀 Server running on port ${PORT}`);
-    });
-
-    server.on('error', (error: any) => {
-      if (error.code === 'EADDRINUSE') {
-        logger.error(`❌ Port ${PORT} is already in use!`);
-        process.exit(1);
-      }
-      logger.error('❌ Server error:', error);
-      process.exit(1);
-    });
-
-    // Graceful shutdown
-    const gracefulShutdown = async () => {
-      logger.info('🔄 Shutting down gracefully...');
-      await mongoose.disconnect();
-      logger.info('✅ MongoDB disconnected');
-      server.close(() => {
-        logger.info('✅ Server closed');
-        process.exit(0);
+// ✅ For Vercel - Connect and export
+if (process.env.VERCEL) {
+  logger.info('🚀 Running on Vercel');
+  connectDB();
+  module.exports = app;
+} else {
+  // ✅ For local development
+  async function startServer(): Promise<void> {
+    try {
+      await connectDB();
+      
+      const server = app.listen(PORT, () => {
+        logger.info(`🚀 Server running on port ${PORT}`);
+        logger.info(`📍 http://localhost:${PORT}`);
       });
-    };
 
-    process.on('SIGTERM', gracefulShutdown);
-    process.on('SIGINT', gracefulShutdown);
+      server.on('error', (error: any) => {
+        if (error.code === 'EADDRINUSE') {
+          logger.error(`❌ Port ${PORT} is already in use!`);
+          process.exit(1);
+        }
+        logger.error('❌ Server error:', error);
+        process.exit(1);
+      });
 
-  } catch (error) {
-    logger.error('❌ Failed to start server:', error);
-    process.exit(1);
+      const gracefulShutdown = async () => {
+        logger.info('🔄 Shutting down gracefully...');
+        await mongoose.disconnect();
+        logger.info('✅ MongoDB disconnected');
+        server.close(() => {
+          logger.info('✅ Server closed');
+          process.exit(0);
+        });
+      };
+
+      process.on('SIGTERM', gracefulShutdown);
+      process.on('SIGINT', gracefulShutdown);
+
+    } catch (error) {
+      logger.error('❌ Failed to start server:', error);
+      process.exit(1);
+    }
   }
-}
 
-startServer();
+  startServer();
+}
 
 export default app;
