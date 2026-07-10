@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: ecommerce-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/ecommerce
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - ecommerce-network
+
+  mongodb:
+    image: mongo:6
+    container_name: ecommerce-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=ecommerce
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - ecommerce-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - ecommerce-network
+
+volumes:
+  mongodb-data:
+  redis-data:
+
+networks:
+  ecommerce-network:
+    driver: bridge
