@@ -2,33 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "runtime": "nodejs24.x"
-      }
+      "src": "src/server.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "dist/server.js"
-    },
-    {
-      "src": "/health",
-      "dest": "dist/server.js"
-    },
-    {
-      "src": "/api/health",
-      "dest": "dist/server.js"
-    },
-    {
-      "src": "/",
-      "dest": "dist/server.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "dist/server.js"
+      "dest": "src/server.ts"
     }
   ]
 }

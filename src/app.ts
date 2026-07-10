@@ -1,12 +1,10 @@
-// app.ts (Add these at the top)
+// app.ts - Complete Vercel Compatible
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
-import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -19,28 +17,28 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// ✅ Vercel Health Check (MUST BE FIRST)
+// ✅ VERCEL ROOT ROUTE - MUST BE FIRST
 app.get('/', (req: Request, res: Response) => {
   res.status(200).json({
+    success: true,
     message: 'E-commerce API is running!',
     version: '1.0.0',
     status: 'online',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
+    environment: process.env.NODE_ENV || 'development',
     endpoints: {
       health: '/health',
-      api: {
-        auth: '/api/auth',
-        products: '/api/products',
-        orders: '/api/orders',
-        payments: '/api/payments',
-        categories: '/api/categories',
-      },
+      api_health: '/api/health',
+      auth: '/api/auth',
+      products: '/api/products',
+      orders: '/api/orders',
+      payments: '/api/payments',
+      categories: '/api/categories',
     },
   });
 });
 
-// ✅ Health check
+// ✅ Health Check
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'healthy',
@@ -51,7 +49,7 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
-// ✅ API Health
+// ✅ API Health Check
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
@@ -62,20 +60,21 @@ app.get('/api/health', (req: Request, res: Response) => {
   });
 });
 
-// API Routes
+// Import Routes
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
 import orderRoutes from './routes/orderRoutes';
 import paymentRoutes from './routes/paymentRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/categories', categoryRoutes);
 
-// 404 Handler
+// ✅ 404 Handler - MUST BE LAST
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     success: false,
@@ -84,6 +83,13 @@ app.use((req: Request, res: Response) => {
 });
 
 // Error Handler
-app.use(errorHandler);
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error('❌ Error:', err.message);
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || 'Internal server error',
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+  });
+});
 
 export default app;
