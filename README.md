@@ -1,63 +1,85 @@
-# 🛒 E-commerce Ordering & Payment System
+# 🛒 E-Commerce Ordering & Payment System
 
-A production-ready e-commerce backend built with **Node.js, Express.js, TypeScript, MongoDB, Redis, and Docker**. The project demonstrates clean architecture, Object-Oriented Programming (OOP), Strategy Pattern implementation for multiple payment providers, DFS-based category traversal, and Redis caching.
+A production-ready **E-Commerce Backend API** built with **Node.js, Express.js, TypeScript, MongoDB, Redis, and Docker**. This project demonstrates scalable backend architecture, Object-Oriented Programming (OOP), Strategy Design Pattern for multiple payment providers, DFS-based category traversal, Redis caching, and secure RESTful APIs.
 
 ---
 
-## 🚀 Features
+## 🚀 Live API
+
+**Base URL**
+
+> https://backend-enginerr.vercel.app
 
 ### Authentication
+
+| Endpoint | URL |
+|----------|-----|
+| Register | https://backend-enginerr.vercel.app/api/auth/register |
+| Login | https://backend-enginerr.vercel.app/api/auth/login |
+| Profile | https://backend-enginerr.vercel.app/api/auth/profile |
+
+---
+
+## 📌 Features
+
+### 🔐 Authentication
+
 - JWT Authentication
 - User Registration
 - User Login
 - Profile Management
-- Password Hashing using bcrypt
+- Password Hashing (bcrypt)
 
-### Product Management
-- Create Product (Admin)
+### 📦 Product Management
+
+- Create Product
 - Update Product
 - Delete Product
-- Get Single Product
+- Get Product
 - Get All Products
+- Pagination
+- Search & Filtering
 
-### Category Management
+### 📂 Category Management
+
 - Create Category
 - Update Category
 - Delete Category
 - Category Tree
-- DFS Tree Traversal
+- DFS Traversal
 - Redis Cache
 
-### Order Management
-- Create Order
-- Order Status Update
-- Automatic Stock Management
-- Order History
+### 🛍 Order Management
 
-### Payment System
-- Stripe Payment
-- bKash Payment
-- Strategy Pattern
+- Create Order
+- Order History
+- Order Status Update
+- Automatic Stock Update
+
+### 💳 Payment System
+
+- Stripe Integration
+- bKash Integration
+- Strategy Design Pattern
 - Payment Verification
 - Payment History
 - Webhook Support
 
-### Security
+### ⚡ Performance
+
+- Redis Caching
+- Optimized Queries
+- Clean Service Layer
+- Error Handling
+
+### 🔒 Security
+
 - Helmet
 - CORS
 - Rate Limiting
-- Environment Variables
 - JWT Authentication
 - Password Encryption
-
-### Other Features
-- Docker Support
-- TypeScript
-- MongoDB (Mongoose)
-- Redis
-- Winston Logging
-- Error Handling
-- Request Validation
+- Environment Variables
 
 ---
 
@@ -79,7 +101,7 @@ A production-ready e-commerce backend built with **Node.js, Express.js, TypeScri
 
 # 📂 Project Structure
 
-```
+```text
 src
 │
 ├── config
@@ -108,25 +130,23 @@ src
 
 # ⚙️ Installation
 
-Clone the repository
+## Clone Repository
 
 ```bash
-git clone https://github.com/your-username/ecommerce-backend.git
+git clone https://github.com/Sadman-Sakib748/your-repository-name.git
 ```
-
-Move into the project
 
 ```bash
-cd ecommerce-backend
+cd your-repository-name
 ```
 
-Install dependencies
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-Copy environment variables
+## Configure Environment
 
 ```bash
 cp .env.example .env
@@ -134,19 +154,19 @@ cp .env.example .env
 
 Update the values inside `.env`.
 
-Start development server
+## Start Development Server
 
 ```bash
 npm run dev
 ```
 
-Build project
+## Build Project
 
 ```bash
 npm run build
 ```
 
-Run production build
+## Start Production
 
 ```bash
 npm start
@@ -156,13 +176,13 @@ npm start
 
 # 🐳 Docker
 
-Run with Docker Compose
+Run Docker
 
 ```bash
 docker-compose up -d
 ```
 
-Stop containers
+Stop Docker
 
 ```bash
 docker-compose down
@@ -171,8 +191,6 @@ docker-compose down
 ---
 
 # 📦 Environment Variables
-
-Create a `.env` file and configure the following variables.
 
 ```env
 PORT=5000
@@ -186,7 +204,7 @@ REDIS_PORT=6379
 REDIS_PASSWORD=your_password
 REDIS_USER=default
 
-JWT_SECRET=your_secret_key
+JWT_SECRET=your_secret
 JWT_EXPIRE=7d
 
 STRIPE_SECRET_KEY=your_stripe_secret
@@ -268,85 +286,81 @@ ADMIN_PASSWORD=Admin@123
 ## Stripe
 
 - Payment Intent
+- Secure Checkout
 - Webhooks
 - Payment Verification
-- Secure Checkout
 
 ## bKash
 
 - Tokenized Checkout
-- Payment Verification
 - Callback Support
 - Sandbox Integration
+- Payment Verification
 
-The project uses the **Strategy Design Pattern** to switch between multiple payment providers.
+The payment module follows the **Strategy Design Pattern**, allowing seamless switching between payment providers.
 
 ---
 
 # 🌳 DFS Category Tree
 
-The Category module supports hierarchical categories using a Depth First Search (DFS) traversal algorithm.
-
-Example
-
-```
+```text
 Electronics
- ├── Laptop
- │      ├── Gaming
- │      └── Business
- └── Mobile
-        ├── Android
-        └── iPhone
+├── Laptop
+│   ├── Gaming
+│   └── Business
+└── Mobile
+    ├── Android
+    └── iPhone
 ```
 
 DFS is used for:
 
-- Category Tree
+- Category Tree Generation
+- Child Category Traversal
 - Product Recommendation
-- Child Category Search
+- Recursive Search
 
 ---
 
 # ⚡ Redis Caching
 
-Redis is used for
+Redis is used for:
 
 - Category Tree Cache
-- Frequently Requested Data
 - Product Recommendations
-
-This significantly reduces database queries and improves response time.
+- Frequently Accessed Data
+- Improved API Performance
 
 ---
 
 # 🎯 Design Patterns
 
-This project follows Object-Oriented Programming principles.
-
-Implemented Design Patterns
+This project follows modern backend architecture with:
 
 - Strategy Pattern
 - Service Layer Pattern
-- Repository-style Separation
 - Dependency Injection Friendly Structure
+- Repository-style Separation
+- Object-Oriented Programming (OOP)
 
 ---
 
 # 🔒 Security
 
 - JWT Authentication
+- Password Hashing
 - Helmet
 - CORS
-- Request Validation
-- Password Hashing
+- Rate Limiting
 - Environment Variables
-- Secure Webhooks
+- Request Validation
+- Secure Payment Webhooks
 
 ---
 
 # 🧪 Testing
 
-Run tests
+Run Unit Tests
 
 ```bash
 npm test
@@ -369,7 +383,7 @@ npm run test:coverage
 # 📈 Future Improvements
 
 - Email Verification
-- Refresh Token Authentication
+- Refresh Token
 - Wishlist
 - Coupon System
 - Inventory Dashboard
@@ -385,14 +399,21 @@ npm run test:coverage
 
 Frontend & MERN Stack Developer
 
-Email: sadman.sakib34523@gmail.com
+📧 Email: sadman.sakib34523@gmail.com
 
-GitHub: https://github.com/Sadman-Sakib748
+🌐 Live API  
+https://backend-enginerr.vercel.app
 
-LinkedIn: https://linkedin.com/in/sadman-sakib-442804372
+🐙 GitHub  
+https://github.com/Sadman-Sakib748
+
+💼 LinkedIn  
+https://linkedin.com/in/sadman-sakib-442804372
 
 ---
 
 # 📄 License
 
-This project is developed as part of the **Raco AI Backend Engineer Technical Assessment**.
+This project was developed as part of the **Raco AI Backend Engineer Technical Assessment**.
+
+Feel free to use this project for learning and portfolio purposes.
