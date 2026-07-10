@@ -7,6 +7,7 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "dev:port": "PORT=5000 nodemon src/server.ts",
     "clean": "rm -rf dist",
     "seed": "ts-node ./seeders/index.ts",
     "seed:prod": "NODE_ENV=production ts-node ./seeders/index.ts",
