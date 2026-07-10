@@ -1,4 +1,4 @@
-// app.ts
+// app.ts (Add Vercel root route)
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -11,7 +11,6 @@ import { errorHandler } from './middleware/errorHandler';
 dotenv.config();
 
 const app: Express = express();
-
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -32,7 +31,16 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-
+// ✅ Vercel Health Check (MUST BE FIRST)
+app.get('/api/health', (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    database: mongoose.connection?.readyState === 1 ? 'connected' : 'disconnected',
+  });
+});
 
 // Health check
 app.get('/health', (req: Request, res: Response) => {
@@ -42,6 +50,26 @@ app.get('/health', (req: Request, res: Response) => {
     uptime: process.uptime(),
     environment: process.env.NODE_ENV,
     database: mongoose.connection?.readyState === 1 ? 'connected' : 'disconnected',
+  });
+});
+
+// ✅ Root route (for Vercel)
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({
+    message: 'E-commerce API is running!',
+    version: '1.0.0',
+    status: 'online',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/health',
+      api: {
+        auth: '/api/auth',
+        products: '/api/products',
+        orders: '/api/orders',
+        payments: '/api/payments',
+        categories: '/api/categories',
+      },
+    },
   });
 });
 
@@ -58,23 +86,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/categories', categoryRoutes);
 
-// Root route
-app.get('/', (req: Request, res: Response) => {
-  res.status(200).json({
-    message: 'E-commerce API is running!',
-    version: '1.0.0',
-    timestamp: new Date().toISOString(),
-    endpoints: {
-      auth: '/api/auth',
-      products: '/api/products',
-      orders: '/api/orders',
-      payments: '/api/payments',
-      categories: '/api/categories',
-    },
-  });
-});
-
-// 404 Handler
+// ✅ 404 Handler (Must be AFTER all routes)
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     success: false,
