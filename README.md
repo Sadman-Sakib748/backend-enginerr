@@ -1,152 +1,398 @@
-# E-commerce Ordering & Payment System
+# 🛒 E-commerce Ordering & Payment System
 
-A production-ready e-commerce backend system built with Node.js, Express, TypeScript, and MongoDB.
+A production-ready e-commerce backend built with **Node.js, Express.js, TypeScript, MongoDB, Redis, and Docker**. The project demonstrates clean architecture, Object-Oriented Programming (OOP), Strategy Pattern implementation for multiple payment providers, DFS-based category traversal, and Redis caching.
 
-## Features
+---
 
-### Core Features
-- ✅ User Registration & Authentication (JWT)
-- ✅ Product Management (CRUD)
-- ✅ Order Management with Stock Control
-- ✅ Multi-provider Payment System (Stripe & bKash)
-- ✅ Category Management with DFS + Caching
-- ✅ Product Recommendations using DFS
-- ✅ Webhook Integration for Payments
+## 🚀 Features
 
-### Design Patterns & Algorithms
-- ✅ Strategy Pattern for Payment Processing
-- ✅ DFS for Category Tree Traversal
-- ✅ Redis Caching for Category Tree
-- ✅ OOP Principles throughout the application
-- ✅ Deterministic Algorithms for Calculations
+### Authentication
+- JWT Authentication
+- User Registration
+- User Login
+- Profile Management
+- Password Hashing using bcrypt
 
-### Technical Features
-- ✅ TypeScript for Type Safety
-- ✅ MongoDB with Mongoose ODM
-- ✅ Redis for Caching
-- ✅ Docker & Docker Compose
-- ✅ Comprehensive Error Handling
-- ✅ Request Validation
-- ✅ Rate Limiting
-- ✅ Security Headers (Helmet)
-- ✅ CORS Support
-- ✅ Structured Logging (Winston)
+### Product Management
+- Create Product (Admin)
+- Update Product
+- Delete Product
+- Get Single Product
+- Get All Products
 
-## Tech Stack
+### Category Management
+- Create Category
+- Update Category
+- Delete Category
+- Category Tree
+- DFS Tree Traversal
+- Redis Cache
 
-- **Runtime**: Node.js (v18+)
-- **Language**: TypeScript
-- **Framework**: Express.js
-- **Database**: MongoDB
-- **Cache**: Redis
-- **Payment**: Stripe, bKash
-- **Testing**: Jest, Supertest
-- **Container**: Docker
+### Order Management
+- Create Order
+- Order Status Update
+- Automatic Stock Management
+- Order History
 
-## Getting Started
+### Payment System
+- Stripe Payment
+- bKash Payment
+- Strategy Pattern
+- Payment Verification
+- Payment History
+- Webhook Support
 
-### Prerequisites
+### Security
+- Helmet
+- CORS
+- Rate Limiting
+- Environment Variables
+- JWT Authentication
+- Password Encryption
 
-- Node.js >= 18
-- MongoDB >= 6
-- Redis >= 7
-- Docker (optional)
+### Other Features
+- Docker Support
+- TypeScript
+- MongoDB (Mongoose)
+- Redis
+- Winston Logging
+- Error Handling
+- Request Validation
 
-### Installation
+---
 
-1. Clone the repository:
+# 🏗️ Tech Stack
+
+| Technology | Version |
+|------------|----------|
+| Node.js | 22.x |
+| Express.js | 4.x |
+| TypeScript | 5.x |
+| MongoDB | Latest |
+| Mongoose | 7.x |
+| Redis | Latest |
+| JWT | 9.x |
+| Stripe | Latest |
+| Docker | Latest |
+
+---
+
+# 📂 Project Structure
+
+```
+src
+│
+├── config
+├── controllers
+├── interfaces
+├── middlewares
+├── models
+├── routes
+├── services
+│   ├── payment
+│   │      ├── PaymentStrategy.ts
+│   │      ├── StripeStrategy.ts
+│   │      ├── BkashStrategy.ts
+│   │      └── PaymentContext.ts
+│   │
+│   ├── category
+│   └── order
+│
+├── utils
+├── validations
+├── app.ts
+└── server.ts
+```
+
+---
+
+# ⚙️ Installation
+
+Clone the repository
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/your-username/ecommerce-backend.git
+```
+
+Move into the project
+
+```bash
 cd ecommerce-backend
-Install dependencies:
+```
 
-bash
+Install dependencies
+
+```bash
 npm install
-Set up environment variables:
+```
 
-bash
+Copy environment variables
+
+```bash
 cp .env.example .env
-# Edit .env with your configuration
-Build the project:
+```
 
-bash
-npm run build
-Start the development server:
+Update the values inside `.env`.
 
-bash
+Start development server
+
+```bash
 npm run dev
-Seed the database:
+```
 
-bash
-npm run seed
-Docker Setup
-Run with Docker Compose:
+Build project
 
-bash
+```bash
+npm run build
+```
+
+Run production build
+
+```bash
+npm start
+```
+
+---
+
+# 🐳 Docker
+
+Run with Docker Compose
+
+```bash
 docker-compose up -d
-API Documentation
-Authentication Endpoints
-Method	Endpoint	Description
-POST	/api/auth/register	Register new user
-POST	/api/auth/login	Login user
-GET	/api/auth/profile	Get user profile
-PUT	/api/auth/profile	Update user profile
-Product Endpoints
-Method	Endpoint	Description
-POST	/api/products	Create product (Admin)
-GET	/api/products	List products
-GET	/api/products/:id	Get product details
-PUT	/api/products/:id	Update product (Admin)
-DELETE	/api/products/:id	Delete product (Admin)
-Order Endpoints
-Method	Endpoint	Description
-POST	/api/orders	Create order
-GET	/api/orders	List user orders
-GET	/api/orders/:id	Get order details
-PUT	/api/orders/:id/status	Update order status (Admin)
-Payment Endpoints
-Method	Endpoint	Description
-POST	/api/payments/initiate	Initiate payment
-POST	/api/payments/webhook/:provider	Payment webhook
-GET	/api/payments/verify/:provider/:transactionId	Verify payment
-GET	/api/payments/history	Get payment history
-Category Endpoints
-Method	Endpoint	Description
-POST	/api/categories	Create category (Admin)
-GET	/api/categories	List categories
-GET	/api/categories/tree	Get category tree
-GET	/api/categories/:id/recommendations	Get recommended products
-PUT	/api/categories/:id	Update category (Admin)
-DELETE	/api/categories/:id	Delete category (Admin)
-Payment Integration
-Stripe
-Set up Stripe account
+```
 
-Get API keys from Stripe Dashboard
+Stop containers
 
-Configure webhook endpoint
+```bash
+docker-compose down
+```
 
-Add webhook signing secret
+---
 
-bKash
-Set up bKash merchant account
+# 📦 Environment Variables
 
-Get App Key, App Secret
+Create a `.env` file and configure the following variables.
 
-Configure callback URL
+```env
+PORT=5000
 
-Set up bKash API credentials
+NODE_ENV=development
 
-Testing
-Run unit tests:
+MONGODB_URI=your_mongodb_connection_string
 
-bash
+REDIS_HOST=your_redis_host
+REDIS_PORT=6379
+REDIS_PASSWORD=your_password
+REDIS_USER=default
+
+JWT_SECRET=your_secret_key
+JWT_EXPIRE=7d
+
+STRIPE_SECRET_KEY=your_stripe_secret
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+
+BKASH_APP_KEY=your_app_key
+BKASH_APP_SECRET=your_app_secret
+BKASH_BASE_URL=https://tokenized.sandbox.bka.sh/v1.2.0-beta
+BKASH_CALLBACK_URL=http://localhost:5000/api/payments/webhook/bkash
+
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=Admin@123
+```
+
+---
+
+# 📖 API Endpoints
+
+## Authentication
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/auth/register |
+| POST | /api/auth/login |
+| GET | /api/auth/profile |
+| PUT | /api/auth/profile |
+
+---
+
+## Products
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/products |
+| GET | /api/products |
+| GET | /api/products/:id |
+| PUT | /api/products/:id |
+| DELETE | /api/products/:id |
+
+---
+
+## Categories
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/categories |
+| GET | /api/categories |
+| GET | /api/categories/tree |
+| GET | /api/categories/:id/recommendations |
+| PUT | /api/categories/:id |
+| DELETE | /api/categories/:id |
+
+---
+
+## Orders
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/orders |
+| GET | /api/orders |
+| GET | /api/orders/:id |
+| PUT | /api/orders/:id/status |
+
+---
+
+## Payments
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/payments/initiate |
+| POST | /api/payments/webhook/:provider |
+| GET | /api/payments/verify/:provider/:transactionId |
+| GET | /api/payments/history |
+
+---
+
+# 💳 Payment Providers
+
+## Stripe
+
+- Payment Intent
+- Webhooks
+- Payment Verification
+- Secure Checkout
+
+## bKash
+
+- Tokenized Checkout
+- Payment Verification
+- Callback Support
+- Sandbox Integration
+
+The project uses the **Strategy Design Pattern** to switch between multiple payment providers.
+
+---
+
+# 🌳 DFS Category Tree
+
+The Category module supports hierarchical categories using a Depth First Search (DFS) traversal algorithm.
+
+Example
+
+```
+Electronics
+ ├── Laptop
+ │      ├── Gaming
+ │      └── Business
+ └── Mobile
+        ├── Android
+        └── iPhone
+```
+
+DFS is used for:
+
+- Category Tree
+- Product Recommendation
+- Child Category Search
+
+---
+
+# ⚡ Redis Caching
+
+Redis is used for
+
+- Category Tree Cache
+- Frequently Requested Data
+- Product Recommendations
+
+This significantly reduces database queries and improves response time.
+
+---
+
+# 🎯 Design Patterns
+
+This project follows Object-Oriented Programming principles.
+
+Implemented Design Patterns
+
+- Strategy Pattern
+- Service Layer Pattern
+- Repository-style Separation
+- Dependency Injection Friendly Structure
+
+---
+
+# 🔒 Security
+
+- JWT Authentication
+- Helmet
+- CORS
+- Request Validation
+- Password Hashing
+- Environment Variables
+- Secure Webhooks
+
+---
+
+# 🧪 Testing
+
+Run tests
+
+```bash
 npm test
-Run integration tests:
+```
 
-bash
+Integration Tests
+
+```bash
 npm run test:integration
-Run with coverage:
+```
 
-bash
+Coverage
+
+```bash
 npm run test:coverage
+```
+
+---
+
+# 📈 Future Improvements
+
+- Email Verification
+- Refresh Token Authentication
+- Wishlist
+- Coupon System
+- Inventory Dashboard
+- ElasticSearch
+- RabbitMQ
+- Kubernetes Deployment
+
+---
+
+# 👨‍💻 Author
+
+**Sadman Sakib**
+
+Frontend & MERN Stack Developer
+
+Email: sadman.sakib34523@gmail.com
+
+GitHub: https://github.com/Sadman-Sakib748
+
+LinkedIn: https://linkedin.com/in/sadman-sakib-442804372
+
+---
+
+# 📄 License
+
+This project is developed as part of the **Raco AI Backend Engineer Technical Assessment**.
